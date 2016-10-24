@@ -47,8 +47,8 @@ public class Tumbler extends Sprite {
         g.drawImage(scaledImage, 0, 0, scaledImage.getWidth(), scaledImage.getHeight(), null);
 
         g.dispose();
-
         this.image = rotatedImage;
+        rotatedImage.flush();
 
         while (directionX == 0) {
             directionX = rando.nextInt(3) - 1;
@@ -58,11 +58,11 @@ public class Tumbler extends Sprite {
         }
     }
 
-    public synchronized void update() {
+    public synchronized void update(Graphics g) {
         x += directionX;
         y += directionY;
 
-        rotateImage();
+        rotateImage(g);
 
         if ((x > MAX_X) || (x < -MAX_X)) {
             x = rando.nextInt(MAX_X);
@@ -83,7 +83,7 @@ public class Tumbler extends Sprite {
         }
     }
 
-    private void rotateImage() {
+    private void rotateImage(Graphics graphics) {
 
         angle += rotationSpeed;
         if (angle > 360)
@@ -91,15 +91,11 @@ public class Tumbler extends Sprite {
         else if (angle < 0)
             angle = 360;
 
-        BufferedImage rotatedImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = rotatedImage.createGraphics();
+        Graphics2D g = (Graphics2D)graphics;
 
         AffineTransform at = g.getTransform();
         at.rotate(Math.toRadians(angle), originalImage.getWidth() / 2, originalImage.getHeight() / 2);
         g.setTransform(at);
         g.drawImage(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), null);
-
-        image = rotatedImage;
-        g.dispose();
     }
 }

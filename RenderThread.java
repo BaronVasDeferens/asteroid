@@ -42,7 +42,7 @@ public class RenderThread extends Thread {
             g.fillRect(0, 0, 600, 600);
 
             for (Sprite spr : sprites) {
-                spr.update();
+                spr.update(g);
                 g.drawImage(spr.image, spr.x, spr.y, null);
             }
 
@@ -52,7 +52,11 @@ public class RenderThread extends Thread {
             }
 
             g.dispose();
-            yield();
+            try {
+                Thread.sleep(25);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

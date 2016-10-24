@@ -8,7 +8,7 @@ public abstract class Sprite {
     public BufferedImage image;
     public int x, y;
 
-    public abstract void update();
+    public abstract void update(Graphics g);
 
 }
 
