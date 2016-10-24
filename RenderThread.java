@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,57 +9,59 @@ import java.util.List;
  */
 public class RenderThread extends Thread {
 
-    public static int sleepDuration = 1;
     List<Sprite> sprites;
     private boolean continueRendering = true;
-    Canvas dp;
+    Canvas canvas;
     private BufferStrategy buffer;
 
+    GraphicsEnvironment ge;
+    GraphicsDevice gd;
+    GraphicsConfiguration gc;
 
-    public RenderThread(List<Sprite> sprites, Canvas dp, BufferStrategy buffer) {
+
+    public RenderThread(List<Sprite> sprites, Canvas canvas, BufferStrategy buffer) {
         this.sprites = sprites;
-        this.dp = dp;
+        this.canvas = canvas;
         this.buffer = buffer;
+
+        ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        gd = ge.getDefaultScreenDevice();
+        gc = gd.getDefaultConfiguration();
+
+        for (GraphicsConfiguration gcfg: gd.getConfigurations())  {
+            if (gcfg.getBufferCapabilities().isPageFlipping() && gcfg.isTranslucencyCapable())
+                gc = gcfg;
+        }
     }
 
     public void run() {
 
-
-        GraphicsEnvironment ge =
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        GraphicsConfiguration gc = gd.getDefaultConfiguration();
-
-
         while (continueRendering) {
 
-            Toolkit.getDefaultToolkit().sync();
 
-            BufferedImage renderedImage = gc.createCompatibleImage(600, 600);
             Graphics g = buffer.getDrawGraphics();
 
-//            g.setColor(Color.BLACK);
-//            g.fillRect(0, 0, 600, 600);
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, 600, 600);
 
             for (Sprite spr : sprites) {
                 spr.update();
                 g.drawImage(spr.image, spr.x, spr.y, null);
             }
 
-            if (!buffer.contentsLost())
+            if (!buffer.contentsLost()) {
                 buffer.show();
-
-            try {
-                Thread.sleep(sleepDuration);
-            } catch (InterruptedException ie) {
-                System.out.println(ie.toString());
-            } finally {
-                g.dispose();
+                Toolkit.getDefaultToolkit().sync();
             }
+
+            g.dispose();
+
+            yield();
+
         }
     }
 
-    public synchronized void quit() {
+    public void quit() {
         continueRendering = false;
     }
 

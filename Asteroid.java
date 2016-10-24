@@ -3,15 +3,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 
-public class Asteroid implements KeyListener {
+public class Asteroid implements KeyListener, WindowListener {
 
-    Canvas dp;
+    Canvas canvas;
     JFrame jf;
     
     public static final int PANEL_WIDTH = 600;
@@ -27,17 +29,16 @@ public class Asteroid implements KeyListener {
     
     private void start() {
 
-        BufferedImage asteroidPic = loadImage("bob.png");
+        BufferedImage asteroicanvasic = loadImage("ship01.png");
 
-        for (int i = 0; i < 20; i++) {
-            sprites.add(new Sprite(asteroidPic, PANEL_WIDTH, PANEL_HEIGHT));
+        for (int i = 0; i < 35; i++) {
+            sprites.add(new Tumbler(asteroicanvasic, PANEL_WIDTH, PANEL_HEIGHT));
         }
 
-        dp = new Canvas();
-        dp.setBackground(Color.BLACK);
-        dp.setSize(PANEL_WIDTH, PANEL_HEIGHT);
-        dp.setIgnoreRepaint(true);
-
+        canvas = new Canvas();
+        canvas.setBackground(Color.BLACK);
+        canvas.setSize(PANEL_WIDTH, PANEL_HEIGHT);
+        canvas.setIgnoreRepaint(true);
 
         jf = new JFrame();
         jf.addKeyListener(this);
@@ -45,14 +46,17 @@ public class Asteroid implements KeyListener {
         jf.setBackground(Color.BLACK);
         jf.setSize(PANEL_WIDTH, PANEL_HEIGHT);
         jf.setPreferredSize(new Dimension(600, 600));
-        jf.add(dp);
+        jf.add(canvas);
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.addWindowListener(this);
+
         jf.pack();
         jf.setVisible(true);
 
-        dp.createBufferStrategy(2);
-        BufferStrategy buffer = dp.getBufferStrategy();
+        canvas.createBufferStrategy(2);
+        BufferStrategy buffer = canvas.getBufferStrategy();
 
-        renderer = new RenderThread(sprites, dp, buffer);
+        renderer = new RenderThread(sprites, canvas, buffer);
         renderer.setPriority(Thread.MAX_PRIORITY);
         renderer.start();
     }
@@ -80,13 +84,9 @@ public class Asteroid implements KeyListener {
                 System.exit(0);
                 break;
             case KeyEvent.VK_UP:
-                renderer.sleepDuration++;
-                System.out.println("sleep : " + renderer.sleepDuration);
+
                 break;
             case KeyEvent.VK_DOWN:
-                if (renderer.sleepDuration > 1)
-                    renderer.sleepDuration--;
-                System.out.println("sleep : " + renderer.sleepDuration);
                 break;
             default:
                 break;
@@ -99,5 +99,29 @@ public class Asteroid implements KeyListener {
 
     public void keyTyped(KeyEvent e) {    }
 
+    @Override
+    public void windowIconified (WindowEvent we) { }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {    }
+
+    @Override
+    public void windowOpened (WindowEvent we) { }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        renderer.quit();
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        renderer.quit();
+    }
+
+    @Override
+    public void windowActivated (WindowEvent we) { }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {  }
 
 }
