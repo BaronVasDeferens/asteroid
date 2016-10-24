@@ -29,10 +29,10 @@ public class Asteroid implements KeyListener, WindowListener {
     
     private void start() {
 
-        BufferedImage asteroicanvasic = loadImage("ship01.png");
+        BufferedImage asteroidCanvas = loadImage("ship01.png");
 
         for (int i = 0; i < 35; i++) {
-            sprites.add(new Tumbler(asteroicanvasic, PANEL_WIDTH, PANEL_HEIGHT));
+            sprites.add(new Tumbler(asteroidCanvas, PANEL_WIDTH, PANEL_HEIGHT));
         }
 
         canvas = new Canvas();
