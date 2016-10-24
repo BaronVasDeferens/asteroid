@@ -81,7 +81,6 @@ public class Tumbler extends Sprite {
             while (directionY == 0)
                 directionY = rando.nextInt(2) - 1;
         }
-
     }
 
     private void rotateImage() {

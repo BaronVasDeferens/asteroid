@@ -36,7 +36,6 @@ public class RenderThread extends Thread {
 
         while (continueRendering) {
 
-
             Graphics g = buffer.getDrawGraphics();
 
             g.setColor(Color.BLACK);
@@ -53,9 +52,7 @@ public class RenderThread extends Thread {
             }
 
             g.dispose();
-
             yield();
-
         }
     }
 
