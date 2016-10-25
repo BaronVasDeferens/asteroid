@@ -16,7 +16,6 @@ public class RenderThread extends Thread {
     GraphicsDevice gd;
     GraphicsConfiguration gc;
 
-
     public RenderThread(List<Sprite> sprites, Canvas canvas, BufferStrategy buffer) {
         this.sprites = sprites;
         this.canvas = canvas;
