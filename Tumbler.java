@@ -35,7 +35,7 @@ public class Tumbler extends Sprite {
 
         Graphics2D g = scaledImage.createGraphics();
         g.drawImage(image, 0, 0, scaledImage.getWidth(), scaledImage.getHeight(), null);
-        //g.dispose();
+
 
         this.originalImage = scaledImage;
 
@@ -77,9 +77,9 @@ public class Tumbler extends Sprite {
             y = rando.nextInt(MAX_Y);
 
             while (directionX == 0)
-                directionX = rando.nextInt(2) - 1;
+                directionX = rando.nextInt(3) - 1;
             while (directionY == 0)
-                directionY = rando.nextInt(2) - 1;
+                directionY = rando.nextInt(3) - 1;
         }
     }
 
@@ -91,11 +91,7 @@ public class Tumbler extends Sprite {
         else if (angle < 0)
             angle = 360;
 
-        Graphics2D g = (Graphics2D)graphics;
+        graphics.drawImage(image, x, y, image.getWidth(), image.getHeight(), null);
 
-        AffineTransform at = g.getTransform();
-        at.rotate(Math.toRadians(angle), originalImage.getWidth() / 2, originalImage.getHeight() / 2);
-        g.setTransform(at);
-        g.drawImage(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), null);
     }
 }

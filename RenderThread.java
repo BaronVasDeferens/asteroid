@@ -7,6 +7,8 @@ import java.util.List;
  */
 public class RenderThread extends Thread {
 
+    private int SLEEP_DURATION = 25;
+
     List<Sprite> sprites;
     private boolean continueRendering = true;
     Canvas canvas;
@@ -38,7 +40,7 @@ public class RenderThread extends Thread {
             Graphics g = buffer.getDrawGraphics();
 
             g.setColor(Color.BLACK);
-            g.fillRect(0, 0, 600, 600);
+            g.fillRect(0, 0, Asteroid.PANEL_WIDTH, Asteroid.PANEL_HEIGHT);
 
             for (Sprite spr : sprites) {
                 spr.update(g);
@@ -52,7 +54,7 @@ public class RenderThread extends Thread {
 
             g.dispose();
             try {
-                Thread.sleep(25);
+                Thread.sleep(SLEEP_DURATION);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

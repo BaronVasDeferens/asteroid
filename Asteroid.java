@@ -9,6 +9,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Asteroid implements KeyListener, WindowListener {
@@ -16,8 +17,8 @@ public class Asteroid implements KeyListener, WindowListener {
     Canvas canvas;
     JFrame jf;
     
-    public static final int PANEL_WIDTH = 600;
-    public static final int PANEL_HEIGHT = 600;
+    public static int PANEL_WIDTH = 600;
+    public static int PANEL_HEIGHT = 600;
 
     RenderThread renderer;
     public ArrayList<Sprite> sprites  = new ArrayList<>();
@@ -29,37 +30,71 @@ public class Asteroid implements KeyListener, WindowListener {
     
     private void start() {
 
-        BufferedImage asteroidCanvas = loadImage("bob.png");
+        jf = new JFrame();
+        goFullscreen(jf);
+        jf.addKeyListener(this);
+        jf.requestFocus();
+        jf.setBackground(Color.BLACK);
+        jf.setSize(PANEL_WIDTH, PANEL_HEIGHT);
+        jf.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
-        for (int i = 0; i < 50; i++) {
-            sprites.add(new Tumbler(asteroidCanvas, PANEL_WIDTH, PANEL_HEIGHT));
-        }
+//        try {
+//            Thread.sleep(250);
+//            System.out.println(PANEL_WIDTH + "x" + PANEL_HEIGHT);
+//        }
+//        catch (InterruptedException ie) {
+//            System.out.println(ie.toString());
+//        }
 
         canvas = new Canvas();
         canvas.setBackground(Color.BLACK);
         canvas.setSize(PANEL_WIDTH, PANEL_HEIGHT);
         canvas.setIgnoreRepaint(true);
 
-        jf = new JFrame();
-        jf.addKeyListener(this);
-        jf.requestFocus();
-        jf.setBackground(Color.BLACK);
-        jf.setSize(PANEL_WIDTH, PANEL_HEIGHT);
-        jf.setPreferredSize(new Dimension(600, 600));
+
         jf.add(canvas);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.addWindowListener(this);
-
         jf.pack();
         jf.setVisible(true);
 
+        BufferedImage asteroidCanvas = loadImage("bob.png");
+        for (int i = 0; i < 50; i++) {
+            sprites.add(new Tumbler(asteroidCanvas, PANEL_WIDTH, PANEL_HEIGHT));
+        }
+
+
         canvas.createBufferStrategy(2);
         BufferStrategy buffer = canvas.getBufferStrategy();
-
         renderer = new RenderThread(sprites, canvas, buffer);
         renderer.setPriority(Thread.MAX_PRIORITY);
         renderer.start();
     }
+
+    private void goFullscreen(JFrame frame) {
+
+
+        for (GraphicsDevice graphicsDev: java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+
+            System.out.println(graphicsDev.toString());
+            System.out.println(graphicsDev.getDisplayMode().getWidth() + "x" + graphicsDev.getDisplayMode().getHeight());
+            System.out.println("bit depth: " + graphicsDev.getDisplayMode().getBitDepth());
+            System.out.println("refresh: " + graphicsDev.getDisplayMode().getRefreshRate());
+            System.out.println("configs: " + Arrays.toString(graphicsDev.getConfigurations()));
+            System.out.println("memory avail: " + graphicsDev.getAvailableAcceleratedMemory());
+
+
+            if (graphicsDev.isFullScreenSupported()) {
+                System.out.println("Fullscreen: yes");
+                graphicsDev.setFullScreenWindow(frame);
+                PANEL_WIDTH = graphicsDev.getDisplayMode().getWidth();
+                PANEL_HEIGHT = graphicsDev.getDisplayMode().getHeight();
+                return;
+            }
+        }
+    }
+
+
 
     private BufferedImage loadImage(String imageName) {
 
@@ -91,8 +126,6 @@ public class Asteroid implements KeyListener, WindowListener {
             default:
                 break;
         }
-
-
     }
 
     public void keyReleased(KeyEvent e) {    }
