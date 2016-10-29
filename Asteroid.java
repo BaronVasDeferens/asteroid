@@ -23,6 +23,8 @@ public class Asteroid implements KeyListener, WindowListener {
     RenderThread renderer;
     public ArrayList<Sprite> sprites  = new ArrayList<>();
 
+    Ship ship;
+
     public static void main (String ... args) {
         Asteroid asteroid = new Asteroid();
         asteroid.start();
@@ -38,19 +40,10 @@ public class Asteroid implements KeyListener, WindowListener {
         jf.setSize(PANEL_WIDTH, PANEL_HEIGHT);
         jf.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
-//        try {
-//            Thread.sleep(250);
-//            System.out.println(PANEL_WIDTH + "x" + PANEL_HEIGHT);
-//        }
-//        catch (InterruptedException ie) {
-//            System.out.println(ie.toString());
-//        }
-
         canvas = new Canvas();
         canvas.setBackground(Color.BLACK);
         canvas.setSize(PANEL_WIDTH, PANEL_HEIGHT);
         canvas.setIgnoreRepaint(true);
-
 
         jf.add(canvas);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,10 +52,14 @@ public class Asteroid implements KeyListener, WindowListener {
         jf.setVisible(true);
 
         BufferedImage asteroidCanvas = loadImage("bob.png");
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             sprites.add(new Tumbler(asteroidCanvas, PANEL_WIDTH, PANEL_HEIGHT));
         }
 
+        ship = new Ship(loadImage("ship01.png"));
+        ship.x = PANEL_WIDTH / 2;
+        ship.y = PANEL_HEIGHT / 2;
+        sprites.add(ship);
 
         canvas.createBufferStrategy(2);
         BufferStrategy buffer = canvas.getBufferStrategy();
@@ -119,9 +116,21 @@ public class Asteroid implements KeyListener, WindowListener {
                 System.exit(0);
                 break;
             case KeyEvent.VK_UP:
-
+            case KeyEvent.VK_W:
+                ship.thrust(1);
+                System.out.println("U");
                 break;
             case KeyEvent.VK_DOWN:
+                break;
+            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
+                ship.rotateRight();
+                System.out.println("R");
+                break;
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
+                ship.rotateLeft();
+                System.out.println("L");
                 break;
             default:
                 break;

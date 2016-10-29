@@ -91,6 +91,14 @@ public class Tumbler extends Sprite {
         else if (angle < 0)
             angle = 360;
 
+//        float data [] = {
+//                0.1111f,0.1111f,0.1111f,
+//                0.1111f,0.1111f,0.1111f,
+//                0.1111f,0.1111f,0.1111f};
+//
+//        Kernel k = new Kernel(3,3,data);
+//        ConvolveOp c = new ConvolveOp(k, ConvolveOp.EDGE_ZERO_FILL, null);
+//        BufferedImage i = c.filter(image,null);
         graphics.drawImage(image, x, y, image.getWidth(), image.getHeight(), null);
 
     }
