@@ -36,7 +36,6 @@ public class Asteroid implements KeyListener, WindowListener {
         goFullscreen(jf);
         jf.addKeyListener(this);
         jf.requestFocus();
-        jf.setBackground(Color.BLACK);
         jf.setSize(PANEL_WIDTH, PANEL_HEIGHT);
         jf.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
@@ -51,9 +50,9 @@ public class Asteroid implements KeyListener, WindowListener {
         jf.pack();
         jf.setVisible(true);
 
-        BufferedImage asteroidCanvas = loadImage("bob.png");
+        BufferedImage image = loadImage("bob.png");
         for (int i = 0; i < 100; i++) {
-            sprites.add(new Tumbler(asteroidCanvas, PANEL_WIDTH, PANEL_HEIGHT));
+            sprites.add(new Tumbler(image, PANEL_WIDTH, PANEL_HEIGHT));
         }
 
         ship = new Ship(loadImage("ship01.png"));

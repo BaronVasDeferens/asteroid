@@ -44,7 +44,6 @@ public class RenderThread extends Thread {
 
             for (Sprite spr : sprites) {
                 spr.update(g);
-                g.drawImage(spr.image, spr.x, spr.y, null);
             }
 
             if (!buffer.contentsLost()) {
