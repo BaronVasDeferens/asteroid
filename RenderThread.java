@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by skot on 10/15/16.
@@ -17,6 +18,11 @@ public class RenderThread extends Thread {
     GraphicsEnvironment ge;
     GraphicsDevice gd;
     GraphicsConfiguration gc;
+
+    private static boolean red = true;
+    private static int redCount = 0;
+
+    public static Random rando = new Random();
 
     public RenderThread(List<Sprite> sprites, Canvas canvas, BufferStrategy buffer) {
         this.sprites = sprites;
@@ -39,7 +45,17 @@ public class RenderThread extends Thread {
 
             Graphics g = buffer.getDrawGraphics();
 
-            g.setColor(Color.BLACK);
+            if (!red) {
+                Color c = new Color(rando.nextInt(255), rando.nextInt(255), rando.nextInt(255));
+                g.setColor(c);
+            }
+
+            redCount++;
+            if (redCount > 7) {
+                red = !red;
+                redCount = 0;
+            }
+
             g.fillRect(0, 0, Asteroid.PANEL_WIDTH, Asteroid.PANEL_HEIGHT);
 
             for (Sprite spr : sprites) {
