@@ -28,6 +28,7 @@ public class Asteroid implements KeyListener, WindowListener {
     public static void main (String ... args) {
         Asteroid asteroid = new Asteroid();
         asteroid.start();
+        //test
     }
     
     private void start() {
